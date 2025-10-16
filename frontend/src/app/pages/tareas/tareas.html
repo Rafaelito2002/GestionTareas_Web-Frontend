@@ -1,0 +1,26 @@
+<div class="container mt-4">
+  <h2>Tareas de la Asignatura</h2>
+
+  <form (ngSubmit)="crearTarea()" class="mb-4">
+    <div class="mb-2">
+      <input type="text" [(ngModel)]="nuevaTarea.nombre" name="nombre" class="form-control" placeholder="Nombre de la tarea" required />
+    </div>
+    <div class="mb-2">
+      <textarea [(ngModel)]="nuevaTarea.descripcion" name="descripcion" class="form-control" placeholder="Descripción" required></textarea>
+    </div>
+    <div class="mb-2">
+      <input type="date" [(ngModel)]="nuevaTarea.fecha_entrega" name="fecha_entrega" class="form-control" required />
+    </div>
+    <button class="btn btn-primary">Crear Tarea</button>
+  </form>
+
+  <ul class="list-group">
+    <li *ngFor="let tarea of tareas" class="list-group-item">
+      <strong>{{ tarea.nombre }}</strong><br />
+      <small>{{ tarea.descripcion }}</small><br />
+      <span>Entrega: {{ tarea.fecha_entrega | date }}</span>
+
+      <a [routerLink]="['/entregas', tarea.id]" class="btn btn-outline-primary btn-sm mt-2">Ver Entregas</a>
+    </li>
+  </ul>
+</div>

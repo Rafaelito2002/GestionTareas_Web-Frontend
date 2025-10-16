@@ -1,0 +1,32 @@
+<div class="container mt-4">
+  <h2>Entregas de la Tarea</h2>
+
+  <div *ngIf="user?.tipo_usuario === 'estudiante'" class="mb-4">
+    <input type="file" (change)="onFileChange($event)" class="form-control mb-2" />
+    <button class="btn btn-primary" (click)="subirEntrega()">Subir Entrega</button>
+  </div>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Estudiante</th>
+        <th>Archivo</th>
+        <th>Fecha</th>
+        <th>Calificación</th>
+        <th *ngIf="user?.tipo_usuario === 'docente'">Evaluar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let entrega of entregas">
+        <td>{{ entrega.nombre }} {{ entrega.apellido }}</td>
+        <td><a [href]="entrega.archivo" target="_blank">Ver archivo</a></td>
+        <td>{{ entrega.fecha_entrega }}</td>
+        <td>{{ entrega.calificacion || 'Sin nota' }}</td>
+        <td *ngIf="user?.tipo_usuario === 'docente'">
+          <input type="number" min="0" max="20" #nota class="form-control form-control-sm" />
+          <button class="btn btn-sm btn-success mt-1" (click)="calificar(entrega.id, nota.value)">Guardar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

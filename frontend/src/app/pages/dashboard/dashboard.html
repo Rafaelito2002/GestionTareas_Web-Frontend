@@ -1,0 +1,13 @@
+<div class="container mt-4">
+  <h2>Bienvenido, {{ user?.username }}</h2>
+  <p>Rol: {{ user?.tipo_usuario }}</p>
+
+  <div *ngIf="user?.tipo_usuario === 'docente'">
+    <a routerLink="/asignaturas" class="btn btn-success">Gestionar Asignaturas</a>
+    <a [routerLink]="['/tareas', asignatura.id]" class="btn btn-outline-secondary btn-sm mt-2">Ver Tareas</a>
+  </div>
+
+  <div *ngIf="user?.tipo_usuario === 'estudiante'">
+    <a routerLink="/tareas" class="btn btn-info">Ver Tareas</a>
+  </div>
+</div>
