@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { EntregaService } from '../../services/entregas';
 
 @Component({
   selector: 'app-entregas',
+  imports: [CommonModule],
   templateUrl: './entregas.html',
 })
 export class Entregas {
@@ -46,8 +48,9 @@ export class Entregas {
     });
   }
 
-  calificar(entregaId: number, nota: number) {
-    this.entregasService.calificarEntrega(entregaId, nota).subscribe(() => {
+  calificar(entregaId: number, nota: string) {
+    const notaNumber = Number(nota);
+    this.entregasService.calificarEntrega(entregaId, notaNumber).subscribe(() => {
       this.cargarEntregas();
     });
   }

@@ -1,11 +1,17 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { TareaService } from '../../services/tareas';
 
 @Component({
   selector: 'app-tareas',
-  templateUrl: './tareas.html',
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
+  templateUrl: './tareas.html'
 })
+
 export class Tareas {
   tareas: any[] = [];
   nuevaTarea = {nombre: '', descripcion: '', fecha_de_entrega:''};

@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { asignaturaService } from '../../services/asignaturas';
 
 @Component({
   selector: 'app-asignaturas',
+  imports: [CommonModule,FormsModule],
   templateUrl: './asignaturas.html',
 })
 export class Asignaturas {
