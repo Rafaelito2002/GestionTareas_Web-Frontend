@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { asignaturaService } from '../../services/asignaturas';
 
 @Component({
   selector: 'app-asignaturas',
@@ -13,7 +12,7 @@ export class Asignaturas {
   nuevaAsignatura = {nombre: '', descripcion: ''};
   docenteId: number = 0;
 
-  constructor(private asignaturaService: asignaturaService){}
+  constructor(){}
 
   ngOnInit(){
     const user = JSON.parse(localStorage.getItem('user')||'{}');
@@ -22,16 +21,9 @@ export class Asignaturas {
   }
 
   cargarAsignaturas(){
-    this.asignaturaService.getAsignatura(this.docenteId).subscribe((res:any)=>{
-      this.asignaturas = res;
-    });
+
   }
 
   crearAsignaturas(){
-    const data = {...this.nuevaAsignatura, docenteId:this.docenteId};
-    this.asignaturaService.crearAsignatura(data).subscribe(()=>{
-      this.nuevaAsignatura = {nombre:'',descripcion: ''};
-      this.cargarAsignaturas();
-    })
   }
 }

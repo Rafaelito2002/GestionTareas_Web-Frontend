@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TareaService } from '../../services/tareas';
 
 @Component({
   selector: 'app-tareas',
@@ -17,7 +16,7 @@ export class Tareas {
   nuevaTarea = {nombre: '', descripcion: '', fecha_de_entrega:''};
   asignaturaId: number = 0;
 
-  constructor(private tareasService:TareaService, private route: ActivatedRoute){}
+  constructor(private route: ActivatedRoute){}
 
   ngOnInit(){
     this.asignaturaId = Number(this.route.snapshot.paramMap.get('id'));
@@ -25,16 +24,10 @@ export class Tareas {
   }
 
   cargarTareas(){
-    this.tareasService.getTareasAsignatura(this.asignaturaId).subscribe((res:any)=>{
-      this.tareas=res;
-    })
+
   }
 
   crearTarea(){
-    const data = {...this.nuevaTarea, asignaturaId:this.asignaturaId};
-    this.tareasService.crearTarea(data).subscribe(()=>{
-      this.nuevaTarea= {nombre:'',descripcion:'',fecha_de_entrega:''};
-      this.cargarTareas();
-    })
+
   }
 }

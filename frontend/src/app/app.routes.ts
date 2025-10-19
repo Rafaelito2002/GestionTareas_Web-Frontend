@@ -6,9 +6,10 @@ import { Dashboard } from './pages/dashboard/dashboard';
 import { Asignaturas } from './pages/asignaturas/asignaturas';
 import { Tareas } from './pages/tareas/tareas';
 import { Entregas } from './pages/entregas/entregas';
+import { Home } from './pages/home/home';
 
 export const routes: Routes = [
-    {path: '', component:Login},
+    {path: '', component:Home},
     {path: 'dashboard',component:Dashboard},
     {path: 'asignaturas', component:Asignaturas},
     {path: 'tareas',component:Tareas},

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { EntregaService } from '../../services/entregas';
 
 @Component({
   selector: 'app-entregas',
@@ -15,7 +14,7 @@ export class Entregas {
   estudianteId:number = 0;
   user:any;
 
-  constructor(private entregasService: EntregaService, private route: ActivatedRoute) {}
+  constructor( private route: ActivatedRoute) {}
 
   ngOnInit(){
     this.tareaId = Number(this.route.snapshot.paramMap.get('id'));
@@ -25,9 +24,7 @@ export class Entregas {
   }
 
   cargarEntregas(){
-    this.entregasService.getEntregasPorTarea(this.tareaId).subscribe((res: any) => {
-      this.entregas = res;
-    });
+
   }
 
   onFileChange(event: any) {
@@ -35,24 +32,11 @@ export class Entregas {
   }
 
   subirEntrega() {
-    if (!this.archivo) return;
-    const formData = new FormData();
-    formData.append('archivo', this.archivo);
-    formData.append('tarea_id', this.tareaId.toString());
-    formData.append('estudiante_id', this.estudianteId.toString());
-    formData.append('fecha_entrega', new Date().toISOString().split('T')[0]);
 
-    this.entregasService.subirEntrega(formData).subscribe(() => {
-      this.archivo = null;
-      this.cargarEntregas();
-    });
   }
 
   calificar(entregaId: number, nota: string) {
-    const notaNumber = Number(nota);
-    this.entregasService.calificarEntrega(entregaId, notaNumber).subscribe(() => {
-      this.cargarEntregas();
-    });
+
   }
 
 }
