@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { EstudianteService } from '../../services/estudiante.service';
 import { DocenteService } from '../../services/docente.service';
 import { TareaService } from '../../services/tarea.service';
@@ -12,6 +11,8 @@ import { Docente } from '../models/docente.model';
 import { Tarea } from '../models/tarea.model';
 import { Entrega } from '../models/entrega.model';
 import { Asignatura } from '../models/asignatura.model';
+import { Router, RouterModule } from '@angular/router';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -47,7 +48,8 @@ export class DashboardComponent implements OnInit {
     private tareaService: TareaService,
     private entregaService: EntregaService,
     private asignaturaService: AsignaturaService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -133,4 +135,6 @@ export class DashboardComponent implements OnInit {
           .slice(0, 5);
       });
   }
+
+
 }

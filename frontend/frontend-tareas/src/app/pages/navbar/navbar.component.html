@@ -1,1 +1,45 @@
-<p>navbar.component works!</p>
+<nav class="bg-blue-600 text-white shadow-lg">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-between h-16">
+
+      <!-- Logo -->
+      <div class="flex items-center">
+        <a routerLink="/dashboard" class="text-xl font-bold">
+          📚 Gestión de Tareas
+        </a>
+      </div>
+
+      <!-- Links -->
+      <div class="flex space-x-4">
+        <a routerLink="/dashboard" class="px-3 py-2 rounded hover:bg-blue-700 transition">
+
+        </a>
+
+        <a routerLink="/estudiantes" class="px-3 py-2 rounded hover:bg-blue-700 transition">
+        </a>
+
+        <a routerLink="/docentes" class="px-3 py-2 rounded hover:bg-blue-700 transition">
+        </a>
+
+        <a routerLink="/asignaturas" class="px-3 py-2 rounded hover:bg-blue-700 transition">
+        </a>
+
+        <a routerLink="/tareas" class="px-3 py-2 rounded hover:bg-blue-700 transition">
+        </a>
+
+        <a routerLink="/entregas" class="px-3 py-2 rounded hover:bg-blue-700 transition">
+
+        </a>
+
+        <!-- Logout -->
+        @if (!isLoginPage) {
+        <button (click)="onLogout()" class="px-4 py-2 bg-red-500 rounded hover:bg-red-600 transition">
+          Cerrar Sesión
+        </button>
+        }
+
+      </div>
+
+    </div>
+  </div>
+</nav>
