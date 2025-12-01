@@ -1,0 +1,274 @@
+<div class="dashboard">
+  <!-- Bienvenida personalizada -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800">
+      Bienvenido, {{ currentUser?.username }}
+    </h1>
+    <p class="text-gray-600 mt-2">
+      {{ getRoleDescription() }}
+    </p>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Estudiantes -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
+          👨‍🎓
+        </div>
+        <div>
+          <p class="text-gray-500">Estudiantes</p>
+          <h3 class="text-2xl font-bold">{{ estudiantesCount }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Docentes -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
+          👨‍🏫
+        </div>
+        <div>
+          <p class="text-gray-500">Docentes</p>
+          <h3 class="text-2xl font-bold">{{ docentesCount }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mis Asignaturas (solo docentes) -->
+    <div *ngIf="isDocente" class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
+          📚
+        </div>
+        <div>
+          <p class="text-gray-500">Mis Asignaturas</p>
+          <h3 class="text-2xl font-bold">{{ misAsignaturasCount }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mis Tareas Pendientes (solo estudiantes) -->
+    <div *ngIf="isEstudiante" class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 mr-4">
+          📝
+        </div>
+        <div>
+          <p class="text-gray-500">Mis Tareas Pendientes</p>
+          <h3 class="text-2xl font-bold">{{ misTareasPendientes }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Entregas -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-red-100 text-red-600 mr-4">
+          📤
+        </div>
+        <div>
+          <p class="text-gray-500">Total Entregas</p>
+          <h3 class="text-2xl font-bold">{{ entregasCount }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tareas Totales (si no es estudiante) -->
+    <div *ngIf="!isEstudiante" class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-indigo-100 text-indigo-600 mr-4">
+          📋
+        </div>
+        <div>
+          <p class="text-gray-500">Total Tareas</p>
+          <h3 class="text-2xl font-bold">{{ tareasCount }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido específico por rol -->
+  <div *ngIf="isDocente" class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Panel para docentes - Mis Asignaturas -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">Mis Asignaturas</h2>
+      <div *ngIf="misAsignaturas.length > 0; else noAsignaturas">
+        <div *ngFor="let asignatura of misAsignaturas"
+             class="p-3 border-b last:border-b-0 hover:bg-gray-50">
+          <p class="font-medium">{{ asignatura.nombre }}</p>
+          <p class="text-sm text-gray-500">{{ asignatura.descripcion || 'Sin descripción' }}</p>
+        </div>
+      </div>
+      <ng-template #noAsignaturas>
+        <p class="text-gray-500">No tienes asignaturas asignadas</p>
+      </ng-template>
+      <a routerLink="/asignaturas"
+         class="mt-4 inline-block text-blue-600 hover:text-blue-800">
+        Gestionar asignaturas →
+      </a>
+    </div>
+
+    <!-- Panel para docentes - Entregas por Calificar -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">Entregas por Calificar</h2>
+      <div *ngIf="entregasPorCalificar.length > 0; else nadaPorCalificar">
+        <div *ngFor="let entrega of entregasPorCalificar.slice(0, 5)"
+             class="p-3 border-b last:border-b-0 hover:bg-gray-50">
+          <p class="font-medium">{{ entrega.tareaNombre || 'Tarea sin nombre' }}</p>
+          <p class="text-sm text-gray-500">
+            Estudiante: {{ entrega.estudianteNombre || 'N/A' }} {{ entrega.estudianteApellido || '' }}
+          </p>
+          <p class="text-sm text-gray-500">
+            Fecha: {{ entrega.fechaEntrega | date:'dd/MM/yyyy' }}
+          </p>
+        </div>
+      </div>
+      <ng-template #nadaPorCalificar>
+        <p class="text-gray-500">No hay entregas por calificar</p>
+      </ng-template>
+      <a routerLink="/entregas"
+         class="mt-4 inline-block text-blue-600 hover:text-blue-800">
+        Ver todas las entregas →
+      </a>
+    </div>
+  </div>
+
+  <div *ngIf="isEstudiante" class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Panel para estudiantes - Tareas Próximas -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">Mis Tareas Próximas</h2>
+      <div *ngIf="misTareasProximas.length > 0; else sinTareas">
+        <div *ngFor="let tarea of misTareasProximas"
+             class="p-3 border-b last:border-b-0 hover:bg-gray-50">
+          <p class="font-medium">{{ tarea.nombre }}</p>
+          <p class="text-sm text-gray-500">
+            Entrega: {{ tarea.fechaEntrega | date:'dd/MM/yyyy' }}
+            <span *ngIf="tarea.asignaturaNombre">• {{ tarea.asignaturaNombre }}</span>
+          </p>
+          <p class="text-sm text-gray-500 truncate">
+            {{ tarea.descripcion || 'Sin descripción' }}
+          </p>
+        </div>
+      </div>
+      <ng-template #sinTareas>
+        <p class="text-gray-500">No tienes tareas pendientes</p>
+      </ng-template>
+      <a routerLink="/tareas"
+         class="mt-4 inline-block text-blue-600 hover:text-blue-800">
+        Ver todas mis tareas →
+      </a>
+    </div>
+
+    <!-- Panel para estudiantes - Últimas Calificaciones -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">Últimas Calificaciones</h2>
+      <div *ngIf="misCalificaciones.length > 0; else sinCalificaciones">
+        <div *ngFor="let entrega of misCalificaciones"
+             class="p-3 border-b last:border-b-0 hover:bg-gray-50">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="font-medium">{{ entrega.tareaNombre || 'Tarea sin nombre' }}</p>
+              <p class="text-sm text-gray-500">
+                <span *ngIf="entrega.asignaturaNombre">{{ entrega.asignaturaNombre }}</span>
+                <span *ngIf="!entrega.asignaturaNombre">Sin asignatura</span>
+              </p>
+            </div>
+            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full font-bold">
+              {{ entrega.calificacion || '0' }}
+            </span>
+          </div>
+          <p class="text-sm text-gray-500 mt-1">
+            Fecha: {{ entrega.fechaEntrega | date:'dd/MM/yyyy' }}
+          </p>
+        </div>
+      </div>
+      <ng-template #sinCalificaciones>
+        <p class="text-gray-500">No tienes calificaciones aún</p>
+      </ng-template>
+      <a routerLink="/entregas"
+         class="mt-4 inline-block text-blue-600 hover:text-blue-800">
+        Ver mis entregas →
+      </a>
+    </div>
+  </div>
+
+  <!-- Accesos Rápidos -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-semibold mb-4">Acciones Rápidas</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Para docentes -->
+      <a *ngIf="isDocente" routerLink="/tareas"
+         class="p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition text-center">
+        <div class="text-2xl mb-2">📝</div>
+        <p class="font-medium">Crear Nueva Tarea</p>
+        <p class="text-sm text-gray-600 mt-1">Asignar tareas a estudiantes</p>
+      </a>
+
+      <!-- Para estudiantes -->
+      <a *ngIf="isEstudiante" routerLink="/tareas"
+         class="p-4 bg-green-50 hover:bg-green-100 rounded-lg transition text-center">
+        <div class="text-2xl mb-2">📋</div>
+        <p class="font-medium">Ver Mis Tareas</p>
+        <p class="text-sm text-gray-600 mt-1">Consultar tareas asignadas</p>
+      </a>
+
+      <!-- Para ambos -->
+      <a routerLink="/entregas"
+         class="p-4 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition text-center">
+        <div class="text-2xl mb-2">📤</div>
+        <p class="font-medium">Registrar Entrega</p>
+        <p class="text-sm text-gray-600 mt-1">Entregar una tarea</p>
+      </a>
+
+      <!-- Administración de estudiantes -->
+      <a routerLink="/estudiantes"
+         class="p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition text-center">
+        <div class="text-2xl mb-2">👨‍🎓</div>
+        <p class="font-medium">Estudiantes</p>
+        <p class="text-sm text-gray-600 mt-1">Gestionar estudiantes</p>
+      </a>
+
+      <!-- Para docentes - Asignaturas -->
+      <a *ngIf="isDocente" routerLink="/asignaturas"
+         class="p-4 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition text-center">
+        <div class="text-2xl mb-2">📚</div>
+        <p class="font-medium">Asignaturas</p>
+        <p class="text-sm text-gray-600 mt-1">Gestionar asignaturas</p>
+      </a>
+
+      <!-- Para docentes - Docentes -->
+      <a *ngIf="isDocente" routerLink="/docentes"
+         class="p-4 bg-red-50 hover:bg-red-100 rounded-lg transition text-center">
+        <div class="text-2xl mb-2">👨‍🏫</div>
+        <p class="font-medium">Docentes</p>
+        <p class="text-sm text-gray-600 mt-1">Gestionar docentes</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- Información del sistema -->
+  <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-gray-50 rounded-lg p-6">
+      <h3 class="font-semibold text-gray-700 mb-2">Información del Sistema</h3>
+      <ul class="text-sm text-gray-600 space-y-1">
+        <li>• Usuario: {{ currentUser?.username }}</li>
+        <li>• Rol: {{ currentUser?.tipoUsuario }}</li>
+        <li>• ID de usuario: {{ currentUser?.usuarioId }}</li>
+        <li>• Sesión iniciada: {{ today | date:'dd/MM/yyyy HH:mm' }}</li>
+      </ul>
+    </div>
+
+    <div class="bg-gray-50 rounded-lg p-6">
+      <h3 class="font-semibold text-gray-700 mb-2">Estado del Sistema</h3>
+      <ul class="text-sm text-gray-600 space-y-1">
+        <li>• Estudiantes registrados: {{ estudiantesCount }}</li>
+        <li>• Docentes registrados: {{ docentesCount }}</li>
+        <li>• Tareas activas: {{ tareasCount }}</li>
+        <li>• Entregas totales: {{ entregasCount }}</li>
+      </ul>
+    </div>
+  </div>
+</div>
