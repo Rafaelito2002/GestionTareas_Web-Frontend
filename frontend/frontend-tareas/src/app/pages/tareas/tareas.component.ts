@@ -5,11 +5,12 @@ import { TareaService } from '../../services/tarea.service';
 import { AsignaturaService } from '../../services/asignatura.service';
 import { Tarea, TareaDTO } from '../models/tarea.model';
 import { Asignatura } from '../models/asignatura.model';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-tareas',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './tareas.component.html'
 })
 export class TareasComponent implements OnInit {
@@ -26,7 +27,8 @@ export class TareasComponent implements OnInit {
 
   constructor(
     private tareaService: TareaService,
-    private asignaturaService: AsignaturaService
+    private asignaturaService: AsignaturaService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -179,5 +181,9 @@ export class TareasComponent implements OnInit {
   getFechaMinima(): string {
     const hoy = new Date();
     return hoy.toISOString().split('T')[0];
+  }
+
+  volver() {
+    this.router.navigate(['/dashboard']);
   }
 }

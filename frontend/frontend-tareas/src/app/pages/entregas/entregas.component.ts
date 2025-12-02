@@ -7,11 +7,12 @@ import { EstudianteService } from '../../services/estudiante.service';
 import { Entrega, EntregaDTO } from '../models/entrega.model';
 import { Tarea } from '../models/tarea.model';
 import { Estudiante } from '../models/estudiante.model';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-entregas',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './entregas.component.html'
 })
 export class EntregasComponent implements OnInit {
@@ -34,7 +35,8 @@ export class EntregasComponent implements OnInit {
   constructor(
     private entregaService: EntregaService,
     private tareaService: TareaService,
-    private estudianteService: EstudianteService
+    private estudianteService: EstudianteService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -206,5 +208,9 @@ export class EntregasComponent implements OnInit {
   getFechaActual(): string {
     const hoy = new Date();
     return hoy.toISOString().split('T')[0];
+  }
+
+  volver() {
+    this.router.navigate(['/dashboard']);
   }
 }
