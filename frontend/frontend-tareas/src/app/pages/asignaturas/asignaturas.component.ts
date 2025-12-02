@@ -5,11 +5,12 @@ import { AsignaturaService } from '../../services/asignatura.service';
 import { DocenteService } from '../../services/docente.service';
 import { Asignatura, AsignaturaDTO } from '../models/asignatura.model';
 import { Docente } from '../models/docente.model';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-asignaturas',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './asignaturas.component.html'
 })
 export class AsignaturasComponent implements OnInit {
@@ -24,7 +25,8 @@ export class AsignaturasComponent implements OnInit {
 
   constructor(
     private asignaturaService: AsignaturaService,
-    private docenteService: DocenteService
+    private docenteService: DocenteService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -149,5 +151,9 @@ export class AsignaturasComponent implements OnInit {
   clearMessages() {
     this.errorMessage = '';
     this.successMessage = '';
+  }
+
+  volver() {
+    this.router.navigate(['/dashboard']);
   }
 }

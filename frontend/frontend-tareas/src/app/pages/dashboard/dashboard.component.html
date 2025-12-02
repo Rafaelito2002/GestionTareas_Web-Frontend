@@ -10,9 +10,9 @@
   </div>
 
   <!-- Estadísticas -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+  <div class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
     <!-- Estudiantes -->
-    <div class="bg-white rounded-lg shadow p-6">
+    <div *ngIf="isDocente" class="bg-white rounded-lg shadow p-6">
       <div class="flex items-center">
         <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
           👨‍🎓
@@ -25,7 +25,7 @@
     </div>
 
     <!-- Docentes -->
-    <div class="bg-white rounded-lg shadow p-6">
+    <div *ngIf="isDocente" class="bg-white rounded-lg shadow p-6">
       <div class="flex items-center">
         <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
           👨‍🏫
@@ -198,7 +198,7 @@
   <!-- Accesos Rápidos -->
   <div class="bg-white rounded-lg shadow p-6">
     <h2 class="text-xl font-semibold mb-4">Acciones Rápidas</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
       <!-- Para docentes -->
       <a *ngIf="isDocente" routerLink="/tareas"
          class="p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition text-center">
@@ -215,16 +215,24 @@
         <p class="text-sm text-gray-600 mt-1">Consultar tareas asignadas</p>
       </a>
 
-      <!-- Para ambos -->
-      <a routerLink="/entregas"
+      <!-- Para docente - Entregas -->
+      <a *ngIf="isDocente" routerLink="/entregas"
          class="p-4 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition text-center">
         <div class="text-2xl mb-2">📤</div>
         <p class="font-medium">Registrar Entrega</p>
         <p class="text-sm text-gray-600 mt-1">Entregar una tarea</p>
       </a>
 
+      <!-- Para estudiante - Entregas -->
+      <a *ngIf="isEstudiante" routerLink="/entregas"
+         class="p-4 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition text-center">
+        <div class="text-2xl mb-2">📤</div>
+        <p class="font-medium">Ver Entrega</p>
+        <p class="text-sm text-gray-600 mt-1">Ver mis tareas</p>
+      </a>
+
       <!-- Administración de estudiantes -->
-      <a routerLink="/estudiantes"
+      <a *ngIf="isDocente" routerLink="/estudiantes"
          class="p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition text-center">
         <div class="text-2xl mb-2">👨‍🎓</div>
         <p class="font-medium">Estudiantes</p>

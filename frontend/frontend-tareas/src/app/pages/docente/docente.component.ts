@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DocenteService } from '../../services/docente.service';
 import { Docente, DocenteDTO } from '../models/docente.model';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-docentes',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './docente.component.html'
 })
 export class DocentesComponent implements OnInit {
@@ -19,7 +20,10 @@ export class DocentesComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
 
-  constructor(private docenteService: DocenteService) {}
+  constructor(
+    private docenteService: DocenteService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.loadDocentes();
@@ -139,5 +143,9 @@ export class DocentesComponent implements OnInit {
   clearMessages() {
     this.errorMessage = '';
     this.successMessage = '';
+  }
+
+  volver() {
+    this.router.navigate(['/dashboard']);
   }
 }

@@ -5,13 +5,25 @@
       <h1 class="text-2xl font-bold text-gray-800">Gestión de Tareas</h1>
       <p class="text-gray-600">Administra las tareas del sistema</p>
     </div>
-    <button (click)="showForm = true"
+    <button *ngIf="!isEstudiante()" 
+            (click)="showForm = true"
             class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center">
       <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
       </svg>
       Nueva Tarea
     </button>
+  </div>
+
+  <!-- Toast personalizado -->
+  <div *ngIf="showToast"
+      class="fixed top-6 right-6 px-4 py-3 rounded-lg shadow-lg text-white animate-fade"
+      [ngClass]="{
+        'bg-green-600': toastType === 'success',
+        'bg-red-600': toastType === 'error'
+      }"
+      style="z-index: 9999;">
+    {{ toastMessage }}
   </div>
 
   <!-- Mensajes -->
@@ -34,7 +46,7 @@
   </div>
 
   <!-- Formulario -->
-  <div *ngIf="showForm" class="mb-6 bg-white p-6 rounded-lg shadow-md border border-gray-200">
+  <div *ngIf="showForm && !isEstudiante()" class="mb-6 bg-white p-6 rounded-lg shadow-md border border-gray-200">
     <h2 class="text-lg font-semibold text-gray-800 mb-4">
       {{ editingTarea ? '✏️ Editar Tarea' : '📝 Nueva Tarea' }}
     </h2>
@@ -149,19 +161,32 @@
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
               <div class="flex space-x-2">
-                <button (click)="editTarea(tarea)"
+                <button *ngIf="!isEstudiante()"
+                        (click)="editTarea(tarea)"
                         class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-md hover:bg-yellow-200 transition flex items-center">
                   <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                   </svg>
                   Editar
                 </button>
-                <button (click)="deleteTarea(tarea.id)"
+                <button *ngIf="!isEstudiante()" 
+                        (click)="confirmDelete(tarea.id)"
                         class="px-3 py-1 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition flex items-center">
                   <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                   </svg>
                   Eliminar
+                </button>
+                <button *ngIf="isEstudiante()"
+                        (click)="viewTarea(tarea)"
+                        class="px-3 py-1 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition flex items-center">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  Ver
                 </button>
               </div>
             </td>
@@ -169,6 +194,43 @@
         </tbody>
       </table>
     </div>
+
+    <div *ngIf="viewingTarea" 
+      class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h2 class="text-2xl font-bold text-blue-700 text-center mb-6 tracking-wide"> 📘 Detalles de la Tarea</h2>
+        <p class="mb-2"><strong>Nombre:</strong> {{ viewingTarea.nombre }}</p>
+        <p class="mb-2"><strong>Descripción:</strong> {{ viewingTarea.descripcion || 'Sin descripción' }}</p>
+        <p class="mb-2"><strong>Asignatura:</strong> {{ viewingTarea.asignaturaNombre }}</p>
+        <p class="mb-4"><strong>Fecha de Entrega:</strong> {{ viewingTarea.fechaEntrega | date:'dd/MM/yyyy' }}</p>
+        <button (click)="viewingTarea = null"
+                class="mt-4 w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+          Cerrar
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="showConfirmDelete"
+     class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+
+  <div class="bg-white w-96 p-6 rounded-xl shadow-lg text-center">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">¿Eliminar tarea?</h2>
+    <p class="text-gray-600 mb-6">Esta acción no se puede deshacer.</p>
+
+    <div class="flex justify-center space-x-3">
+      <button (click)="deleteTareaConfirmado()"
+              class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+        Eliminar
+      </button>
+
+      <button (click)="cancelDelete()"
+              class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+</div>
 
     <!-- Empty State -->
     <div *ngIf="!loading && tareas.length === 0" class="p-8 text-center">
@@ -184,3 +246,9 @@
     </div>
   </div>
 </div>
+
+<button 
+  (click)="volver()"
+  style="padding: 12px 24px;font-size: 16px;border: none;border-radius: 12px;background-color: #3b82f6;color: white;cursor: pointer;box-shadow: 0 4px 10px rgba(0,0,0,0.15);margin-left: 20px;">
+  ← Regresar
+</button>
