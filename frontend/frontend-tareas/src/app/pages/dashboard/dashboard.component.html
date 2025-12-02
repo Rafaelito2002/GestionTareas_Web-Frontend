@@ -10,9 +10,9 @@
   </div>
 
   <!-- Estadísticas -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+  <div class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
     <!-- Estudiantes -->
-    <div class="bg-white rounded-lg shadow p-6">
+    <div *ngIf="isDocente" class="bg-white rounded-lg shadow p-6">
       <div class="flex items-center">
         <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
           👨‍🎓
@@ -25,7 +25,7 @@
     </div>
 
     <!-- Docentes -->
-    <div class="bg-white rounded-lg shadow p-6">
+    <div *ngIf="isDocente" class="bg-white rounded-lg shadow p-6">
       <div class="flex items-center">
         <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
           👨‍🏫
