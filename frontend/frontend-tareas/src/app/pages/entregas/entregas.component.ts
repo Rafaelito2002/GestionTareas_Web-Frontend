@@ -28,9 +28,11 @@ export class EntregasComponent implements OnInit {
   };
   showForm = false;
   editingEntrega = false;
+  viewingEntrega: Entrega | null = null;
   loading = false;
   errorMessage = '';
   successMessage = '';
+  userType: string | null = null;
 
   constructor(
     private entregaService: EntregaService,
@@ -40,9 +42,18 @@ export class EntregasComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.userType = localStorage.getItem('userType');
     this.loadEntregas();
     this.loadTareas();
     this.loadEstudiantes();
+  }
+
+  isEstudiante(): boolean {
+    return this.userType === 'estudiante';
+  }
+
+  isDocente(): boolean {
+    return this.userType === 'docente';
   }
 
   loadEntregas() {
@@ -121,6 +132,10 @@ export class EntregasComponent implements OnInit {
     this.editingEntrega = true;
     this.showForm = true;
     this.clearMessages();
+  }
+
+  viewEntrega(entrega: Entrega) {
+    this.viewingEntrega = entrega;
   }
 
   deleteEntrega(id: number) {
