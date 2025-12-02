@@ -215,12 +215,20 @@
         <p class="text-sm text-gray-600 mt-1">Consultar tareas asignadas</p>
       </a>
 
-      <!-- Para ambos -->
-      <a routerLink="/entregas"
+      <!-- Para docente - Entregas -->
+      <a *ngIf="isDocente" routerLink="/entregas"
          class="p-4 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition text-center">
         <div class="text-2xl mb-2">📤</div>
         <p class="font-medium">Registrar Entrega</p>
         <p class="text-sm text-gray-600 mt-1">Entregar una tarea</p>
+      </a>
+
+      <!-- Para estudiante - Entregas -->
+      <a *ngIf="isEstudiante" routerLink="/entregas"
+         class="p-4 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition text-center">
+        <div class="text-2xl mb-2">📤</div>
+        <p class="font-medium">Ver Entrega</p>
+        <p class="text-sm text-gray-600 mt-1">Ver mis tareas</p>
       </a>
 
       <!-- Administración de estudiantes -->
