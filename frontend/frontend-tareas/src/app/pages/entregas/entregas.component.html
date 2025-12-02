@@ -87,7 +87,7 @@
                  placeholder="Nombre del archivo">
         </div>
 
-        <div>
+        <div *ngIf="isDocente">
           <label class="block text-sm font-medium text-gray-700 mb-1">Calificación (0-10)</label>
           <input type="number" [(ngModel)]="currentEntrega.calificacion"
                  name="calificacion" min="0" max="10" step="0.1"
