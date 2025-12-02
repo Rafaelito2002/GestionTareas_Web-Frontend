@@ -18,9 +18,11 @@ export class TareasComponent implements OnInit {
   currentTarea: TareaDTO = { nombre: '', descripcion: '', fechaEntrega: new Date(), asignaturaId: 0 };
   showForm = false;
   editingTarea = false;
+  viewingTarea: Tarea | null = null;
   loading = false;
   errorMessage = '';
   successMessage = '';
+  userType: string | null = null;
 
   constructor(
     private tareaService: TareaService,
@@ -28,8 +30,17 @@ export class TareasComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.userType = localStorage.getItem('userType');
     this.loadTareas();
     this.loadAsignaturas();
+  }
+
+  isEstudiante(): boolean {
+    return this.userType === 'estudiante';
+  }
+
+  isDocente(): boolean {
+    return this.userType === 'docente';
   }
 
   loadTareas() {
@@ -96,6 +107,10 @@ export class TareasComponent implements OnInit {
     this.editingTarea = true;
     this.showForm = true;
     this.clearMessages();
+  }
+
+  viewTarea(tarea: Tarea) {
+    this.viewingTarea = tarea;
   }
 
   deleteTarea(id: number) {
